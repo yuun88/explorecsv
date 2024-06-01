@@ -44,7 +44,7 @@ if uploaded_file is not None:
         plt.xticks(rotation=90, ha='right')
         
         # Create tabs for bar chart and unique values
-        tab1, tab2 = st.tabs(["Bar Chart", "Unique Values"])
+        tab1, tab2 = st.tabs(["Bar Chart", "Unique Users"])
         
         with tab1:
             st.pyplot(fig)
@@ -56,4 +56,4 @@ if uploaded_file is not None:
             st.write(f"Unique values and counts for {x_axis_column}:")
             st.write(unique_values_counts)
     else:
-        st.write("The uploaded file does not contain the selected column and 'user_id' column.")
+        st.write("The file need a 'user_id' column. Then make sure you have selected 'user_id' and a second attribute")
