@@ -9,6 +9,11 @@ uploaded_file = st.file_uploader("Choose a file")
 if uploaded_file is not None:
     # Read the file into a DataFrame
     df = pd.read_csv(uploaded_file)
+
+    # Drop emails
+    for col_name in df.columns: 
+        if col_name == 'email' or col_name == 'Email':
+            df.pop(col_name)
     
     # Display the DataFrame for editing
     edited_df = st.data_editor(df, num_rows="dynamic")
