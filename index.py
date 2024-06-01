@@ -51,9 +51,9 @@ if uploaded_file is not None:
         
         with tab2:
             # Display the unique values and their counts
-            unique_values_counts = edited_df[x_axis_column].value_counts().reset_index()
+            unique_values_counts = edited_df[x_axis_column].value_counts(dropna=False).reset_index()
             unique_values_counts.columns = [x_axis_column, 'count']
-            st.write(f"Unique values and counts for {x_axis_column}:")
+            st.write(f"Unique values and counts for {x_axis_column}, including NaN:")
             st.write(unique_values_counts)
     else:
         st.write("The file need a 'user_id' column. Then make sure you have selected 'user_id' and a second attribute")
