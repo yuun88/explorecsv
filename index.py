@@ -9,14 +9,17 @@ uploaded_file = st.file_uploader("Choose a file")
 if uploaded_file is not None:
     # Read the file into a DataFrame
     df = pd.read_csv(uploaded_file)
-
-    # Drop emails
     for col_name in df.columns: 
-        if col_name == 'email' or col_name == 'Email':
+        if col_name.lower() == 'email':
             df.pop(col_name)
     
+    header_list = df.columns.unique()
+    header_selection = st.multiselect('Select columns', header_list, ['user_id'])
+
+    df_selection = df[header_selection]
+    
     # Display the DataFrame for editing
-    edited_df = st.data_editor(df, num_rows="dynamic")
+    edited_df = st.data_editor(df_selection, num_rows="dynamic")
     
     # Filter out 'user_id' from the columns for the selectbox
     columns_for_selectbox = [col for col in edited_df.columns if col != 'user_id']
@@ -40,21 +43,17 @@ if uploaded_file is not None:
         ax.set_title(f'Bar Chart of {x_axis_column} vs User ID Count')
         plt.xticks(rotation=90, ha='right')
         
-        # Display the bar chart in Streamlit
-        #st.pyplot(fig)
+        # Create tabs for bar chart and unique values
+        tab1, tab2 = st.tabs(["Bar Chart", "Unique Values"])
+        
+        with tab1:
+            st.pyplot(fig)
+        
+        with tab2:
+            # Display the unique values and their counts
+            unique_values_counts = edited_df[x_axis_column].value_counts().reset_index()
+            unique_values_counts.columns = [x_axis_column, 'count']
+            st.write(f"Unique values and counts for {x_axis_column}:")
+            st.write(unique_values_counts)
     else:
         st.write("The uploaded file does not contain the selected column and 'user_id' column.")
-
-            # Create tabs for bar chart and unique values
-    tab1, tab2 = st.tabs(["Bar Chart", "Unique Values"])
-    
-    with tab1:
-        st.pyplot(fig)
-    
-    with tab2:
-        # Display the unique values and their counts
-        unique_values_counts = edited_df[x_axis_column].value_counts().reset_index()
-        unique_values_counts.columns = [x_axis_column, 'count']
-        st.write(f"Unique values and counts for {x_axis_column}:")
-        st.write(unique_values_counts)
-        
